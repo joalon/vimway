@@ -1,14 +1,23 @@
-CC=gcc
-CFLAGS=-DWLR_USE_UNSTABLE -lpixman-1 -lwlroots -lwayland-server -I include
+CC = gcc
+CFLAGS = -DWLR_USE_UNSTABLE 
+INC = -lpixman-1 -lwlroots -lwayland-server -I include
 
-SRC=src/
-BUILD=build/
-OBJ=$(SRC)vimway.o
-BIN=$(BUILD)vimway
+OUT = build/vimway
+ODIR = obj
+SDIR = src
 
-$(BIN): $(OBJ)
-	$(CC) -o $(BIN) $(OBJ) $(CFLAGS)
+_OBJS = main.o vimway.o
+OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
+$(ODIR)/%.o: $(SDIR)/%.c
+	$(CC) -c $(INC) -o $@ $< $(CFLAGS)
+
+$(OUT): $(OBJS)
+	$(CC) -o $(OUT) $(CFLAGS) $(INC) $(OBJS)
+
+
+.PHONY: clean
 
 clean:
-	rm -f $(BIN) $(OBJ)
+	rm $(ODIR)/*.o $(OUT)
+
