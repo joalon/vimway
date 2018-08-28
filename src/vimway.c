@@ -6,6 +6,7 @@
 #include <wlr/backend.h>
 #include <wlr/types/wlr_output.h>
 
+#include "vimway.h"
 
 struct tc_server {
 	struct wl_display *wl_display;
@@ -37,6 +38,21 @@ static void output_destroy_notify(struct wl_listener *listener, void *data) {
 	free(output);
 }
 
+static void output_frame_notify(struct wl_listener *listener, void *data) {
+	struct tc_output *output = wl_container_of(listener, output, frame);
+	struct wlr_output *wlr_output = data;
+	struct wlr_renderer *renderer = wlr_backend_get_renderer(wlr_output->backend);
+
+	wlr_output_make_current(wlr_output, NULL);
+	wlr_renderer_begin(renderer, wlr_output);
+
+	float color[4] = {1.0, 0, 0, 1.0};
+	wlr_renderer_clear(renderer, color);
+
+	wlr_output_swap_buffers(wlr_output, NULL, NULL);
+	wlr_renderer_end(renderer);
+}
+
 static void new_output_notify(struct wl_listener *listener, void *data) {
 	struct tc_server *server = wl_container_of(listener, server, new_output);
 	struct wlr_output *wlr_output = data;
@@ -54,6 +70,11 @@ static void new_output_notify(struct wl_listener *listener, void *data) {
 
 	output->destroy.notify = output_destroy_notify;
 	wl_signal_add(&wlr_output->events.destroy, &output->destroy);
+
+	output->frame.notify = output_frame_notify;
+	wl_signal_add(&wlr_output->events.frame, &output->frame);
+
+	wlr_output_create_global(&wlr_output);
 }
 
 int main(int argc, char* argv[]) {
@@ -72,14 +93,24 @@ int main(int argc, char* argv[]) {
 	server.new_output.notify = new_output_notify;
 	wl_signal_add(&server.backend->events.new_output, &server.new_output);
 
+	const char *socket = wl_display_add_socket_auto(server.wl_display);
+	assert(socket);
+
 	if (!wlr_backend_start(server.backend)) {
 		fprintf(stderr, "Failed to start backend\n");
 		wl_display_destroy(server.wl_display);
 		return 1;
 	}
 
+	printf("Running compositor on wayland display '%s'\n", socket);
+	setenv("WAYLAND_DISPLAY", socket, true);
+
+	wl_display_init_shm(server.wl_display);
+
 	wl_display_run(server.wl_display);
 	wl_display_destroy(server.wl_display);
+
+	printf("Stopping test-comp...\n");
 
 	return 0;
 }

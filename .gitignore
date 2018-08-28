@@ -1,2 +1,2 @@
-*.o
-test-comp
+src/*.o
+build/*
