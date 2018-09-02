@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -DWLR_USE_UNSTABLE 
-INC = -lpixman-1 -lwlroots -lwayland-server -I include
+INC = -lpixman-1 -lwlroots -lwayland-server -lm -I include
 
 OUT = build/vimway
 ODIR = obj
@@ -13,7 +13,7 @@ $(ODIR)/%.o: $(SDIR)/%.c
 	$(CC) -c $(INC) -o $@ $< $(CFLAGS)
 
 $(OUT): $(OBJS)
-	$(CC) -o $(OUT) $(CFLAGS) $(INC) $(OBJS)
+	$(CC) -o $(OUT) $(CFLAGS) $(INC) $(OBJS) -g
 
 
 .PHONY: clean

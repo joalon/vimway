@@ -5,6 +5,7 @@
 #include <wayland-server.h>
 #include <wlr/backend.h>
 #include <wlr/types/wlr_output.h>
+#include <wlr/types/wlr_compositor.h>
 
 #include "vimway.h"
 
@@ -37,11 +38,18 @@ int main(int argc, char* argv[]) {
 	setenv("WAYLAND_DISPLAY", socket, true);
 
 	wl_display_init_shm(server.wl_display);
+	server.compositor = wlr_compositor_create(server.wl_display, wlr_backend_get_renderer(server.backend));
+
+	printf("Creating xdg_shell");
+
+	wlr_xdg_shell_v6_create(server.wl_display);
+
+	printf("Starting display");
 
 	wl_display_run(server.wl_display);
 	wl_display_destroy(server.wl_display);
 
-	printf("Stopping test-comp...\n");
+	printf("Stopping vimway\n");
 
 	return 0;
 }
