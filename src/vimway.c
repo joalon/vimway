@@ -27,18 +27,14 @@ void output_frame_notify(struct wl_listener *listener, void *data) {
 	struct wlr_output *wlr_output = data;
 	struct wlr_renderer *renderer = wlr_backend_get_renderer(wlr_output->backend);
 
-	printf("in output_frame_notify");
-
 	struct timespec now;
 	clock_gettime(CLOCK_MONOTONIC, &now);
 
 	wlr_output_make_current(wlr_output, NULL);
 	wlr_renderer_begin(renderer, wlr_output->width, wlr_output->height);
 
-	float color[4] = { 0.4f, 0.4f, 0.4f, 1.0f };
+	float color[4] = { 1.0f, 0.4f, 0.4f, 1.0f };
 	wlr_renderer_clear(renderer, color);
-
-	printf("after renderer_clear");
 
 	struct wl_resource *_surface;
 	wl_resource_for_each(_surface, &server->compositor->surface_resources) {
@@ -54,14 +50,6 @@ void output_frame_notify(struct wl_listener *listener, void *data) {
                 };
                 float matrix[16];
 
-		printf("In render loop!\n");
-
-//		struct wlr_texture *texture = wlr_surface_get_texture(surface);
-
-//		wlr_matrix_project_box(matrix, &render_box,
-//                                surface->current->transform,
-//                                0, wlr_output->transform_matrix);
-//		wlr_render_with_matrix(renderer, texture, matrix, 1.0f);
 		wlr_render_rect(renderer, &render_box, color, wlr_output->transform_matrix); 
 		wlr_surface_send_frame_done(surface, &now);
 	}
