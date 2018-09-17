@@ -3,6 +3,7 @@
 #include <wayland-server.h>
 #include <wlr/backend.h>
 #include <wlr/types/wlr_compositor.h>
+#include <wlr/types/wlr_seat.h>
 
 struct vw_server {
 	struct wl_display *wl_display;
@@ -12,8 +13,16 @@ struct vw_server {
 	struct wlr_compositor *compositor;
 
 	struct wl_listener new_output;
-
 	struct wl_list outputs;
+
+	struct wl_listener new_input;
+	struct wl_list keyboards;
+
+	struct wlr_seat *seat;
+};
+
+struct vw_input {
+	struct wlr_input *wlr_input;
 };
 
 struct vw_output {
@@ -26,6 +35,12 @@ struct vw_output {
 
 	struct wl_list link;
 };
+
+void keyboard_handle_key(struct wl_listener *listener, void *data);
+
+void keyboard_handle_modifiers(struct wl_listener *listener, void *data);
+
+void new_input_notify(struct wl_listener *listener, void *data);
 
 void output_destroy_notify(struct wl_listener *listener, void *data);
 

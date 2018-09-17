@@ -20,10 +20,18 @@ int main(int argc, char* argv[]) {
 	server.backend = wlr_backend_autocreate(server.wl_display, NULL);
 	assert(server.backend);
 
+	// Create output callbacks
 	wl_list_init(&server.outputs);
-
 	server.new_output.notify = new_output_notify;
 	wl_signal_add(&server.backend->events.new_output, &server.new_output);
+
+	// Wire up new input callbacks
+	wl_list_init(&server.keyboards);
+	server.new_input.notify = new_input_notify;
+	wl_signal_add(&server.backend->events.new_input, &server.new_input);
+
+	server.seat = wlr_seat_create(server.wl_display, "seat0");
+	assert(server.seat);
 
 	const char *socket = wl_display_add_socket_auto(server.wl_display);
 	assert(socket);
@@ -36,20 +44,18 @@ int main(int argc, char* argv[]) {
 
 	printf("Running compositor on wayland display '%s'\n", socket);
 	setenv("WAYLAND_DISPLAY", socket, true);
-
 	wl_display_init_shm(server.wl_display);
 	server.compositor = wlr_compositor_create(server.wl_display, wlr_backend_get_renderer(server.backend));
 
 	printf("Creating xdg_shell");
-
 	wlr_xdg_shell_v6_create(server.wl_display);
 
 	printf("Starting display");
-
 	wl_display_run(server.wl_display);
-	wl_display_destroy(server.wl_display);
 
 	printf("Stopping vimway\n");
+	wl_display_destroy_clients(server.wl_display);
+	wl_display_destroy(server.wl_display);
 
 	return 0;
 }

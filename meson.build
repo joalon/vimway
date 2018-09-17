@@ -1,9 +1,11 @@
 project('vimway', 'c')
 
-
-deps = [ dependency('pixman-1'),
+deps = [
+  dependency('pixman-1'),
   dependency('wayland-server'),
-  dependency('wlroots') ]
+  dependency('wlroots'),
+  dependency('xkbcommon')
+]
 
 inc_dir = include_directories('include/')
 
