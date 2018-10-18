@@ -12,16 +12,11 @@
 #include <wlr/types/wlr_compositor.h>
 #include <wlr/types/wlr_input_device.h>
 #include <xkbcommon/xkbcommon.h>
+#include <nvim/api/private/defs.h>
 
 #include "vimway.h"
 
-//extern "C"{
-//	#include <lua5.2/lualib.h>
-//	#include <lua5.2/lua.h>
-//}
-
-
-extern int nvim_list_bufs();
+extern Array nvim_get_api_info(uint64_t channel_id);
 
 
 void keyboard_handle_key(struct wl_listener *listener, void *data) {
@@ -34,17 +29,15 @@ void keyboard_handle_key(struct wl_listener *listener, void *data) {
 		printf("Key released!\n");
 
 	uint32_t modifiers = wlr_keyboard_get_modifiers(device->keyboard);
-	printf("modifiers is: %d\n", modifiers);
-	printf("WLR_BUTTON_PRESSED: %d\n", WLR_BUTTON_PRESSED);
-	printf("WLR_BUTTON_RELEASED: %d\n", WLR_BUTTON_RELEASED);
-	printf("WLR_MODIFIER_ALT: %d\n", WLR_MODIFIER_ALT);
-	printf("WLR_MODIFIER_CTRL: %d\n", WLR_MODIFIER_CTRL);
-
-	nvim_list_bufs();
-
-
+//	printf("modifiers is: %d\n", modifiers);
+//	printf("WLR_BUTTON_PRESSED: %d\n", WLR_BUTTON_PRESSED);
+//	printf("WLR_BUTTON_RELEASED: %d\n", WLR_BUTTON_RELEASED);
+//	printf("WLR_MODIFIER_ALT: %d\n", WLR_MODIFIER_ALT);
+//	printf("WLR_MODIFIER_CTRL: %d\n", WLR_MODIFIER_CTRL);
 	if (modifiers & WLR_MODIFIER_CTRL) 
 		printf("Ctrl was pressed!\n");
+
+	Array result = nvim_get_api_info(1);
 
 	return;
 }

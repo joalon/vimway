@@ -22,7 +22,8 @@ deps = [
 ]
 
 include_dirs= [
-  include_directories('include/')
+  include_directories('include/'),
+  include_directories('third-party/neovim/src/')
 ]
 
 executable('vimway', ['src/main.c', 'src/vimway.c', 'include/vimway.h'], dependencies: deps, objects: 'include/libnvim.a', c_args: '-DWLR_USE_UNSTABLE', include_directories: include_dirs)
