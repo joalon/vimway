@@ -15,8 +15,36 @@
 
 #include "vimway.h"
 
+//extern "C"{
+//	#include <lua5.2/lualib.h>
+//	#include <lua5.2/lua.h>
+//}
+
+
+extern int nvim_list_bufs();
+
+
 void keyboard_handle_key(struct wl_listener *listener, void *data) {
-	printf("Key pressed!\n");
+	struct wlr_event_keyboard_key *event = data;
+	struct wlr_input_device *device = wl_container_of(listener, device, keyboard);
+	
+	if (event->state == WLR_BUTTON_PRESSED)
+		printf("Key pressed!\n");
+	else if (event->state == WLR_BUTTON_RELEASED)
+		printf("Key released!\n");
+
+	uint32_t modifiers = wlr_keyboard_get_modifiers(device->keyboard);
+	printf("modifiers is: %d\n", modifiers);
+	printf("WLR_BUTTON_PRESSED: %d\n", WLR_BUTTON_PRESSED);
+	printf("WLR_BUTTON_RELEASED: %d\n", WLR_BUTTON_RELEASED);
+	printf("WLR_MODIFIER_ALT: %d\n", WLR_MODIFIER_ALT);
+	printf("WLR_MODIFIER_CTRL: %d\n", WLR_MODIFIER_CTRL);
+
+	nvim_list_bufs();
+
+
+	if (modifiers & WLR_MODIFIER_CTRL) 
+		printf("Ctrl was pressed!\n");
 
 	return;
 }

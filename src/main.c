@@ -47,10 +47,10 @@ int main(int argc, char* argv[]) {
 	wl_display_init_shm(server.wl_display);
 	server.compositor = wlr_compositor_create(server.wl_display, wlr_backend_get_renderer(server.backend));
 
-	printf("Creating xdg_shell");
+	printf("Creating xdg_shell\n");
 	wlr_xdg_shell_v6_create(server.wl_display);
 
-	printf("Starting display");
+	printf("Starting display\n");
 	wl_display_run(server.wl_display);
 
 	printf("Stopping vimway\n");

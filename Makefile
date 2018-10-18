@@ -21,3 +21,6 @@ $(OUT): $(OBJS)
 clean:
 	rm $(ODIR)/*.o $(OUT)
 
+libnvim:
+	cd third-party/neovim; make libnvim; cp build/lib/libnvim.a ../../include/
+
