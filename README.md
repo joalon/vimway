@@ -1,9 +1,6 @@
 # Just another wayland compositor
 
-"Some times I get too caught up in what I could that I don't stop and think if I should"
-
 Small experiment, trying to get a wayland compositor up and running.
-
 
 Used lots of good tutorials:
 
@@ -13,5 +10,3 @@ Used lots of good tutorials:
 
 * https://people.freedesktop.org/%7Ewhot/wayland-doxygen/wayland/Server/structwl__listener.html
 
-
-Super cred to Drew DeVault for Wlroots and Sway!
