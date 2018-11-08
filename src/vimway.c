@@ -39,6 +39,8 @@ void keyboard_handle_key(struct wl_listener *listener, void *data) {
 
 	Array result = nvim_get_api_info(1);
 
+	printf("nvim_get_api_info result size is: %d\n", result.size);
+
 	return;
 }
 
