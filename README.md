@@ -10,3 +10,17 @@ Used lots of good tutorials:
 
 * https://people.freedesktop.org/%7Ewhot/wayland-doxygen/wayland/Server/structwl__listener.html
 
+Not really usable yet but to run it:
+
+```
+git clone https://github.com/joalon/vimway
+cd vimway
+git submodule init
+git submodule update
+make libnvim
+mkdir build
+meson build
+cd build
+ninja
+```
+
