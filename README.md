@@ -1,6 +1,6 @@
 # Just another wayland compositor
 
-Small experiment, trying to get a wayland compositor up and running.
+Small experiment, trying to get a wayland compositor up and running with the neovim expression engine.
 
 Used lots of good tutorials:
 
@@ -41,4 +41,5 @@ meson build; \
 cd build; \
 ninja
 ```
-Mkae sure to run under another wayland compositor! Doesn't handle input yet so you can't interrupt it/switch to another tty.
+
+Make sure to run under another wayland compositor! Doesn't handle input yet so you can't interrupt it/switch to another tty.
