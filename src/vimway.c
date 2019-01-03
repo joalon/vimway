@@ -22,32 +22,20 @@ extern Array nvim_get_api_info(uint64_t channel_id);
 void keyboard_handle_key(struct wl_listener *listener, void *data) {
 	struct wlr_event_keyboard_key *event = data;
 	struct wlr_input_device *device = wl_container_of(listener, device, keyboard);
+	struct vw_server *server = wl_container_of(listener, server, new_input);
 	
-	if (event->state == WLR_BUTTON_PRESSED)
-		printf("Key pressed!\n");
-	else if (event->state == WLR_BUTTON_RELEASED)
-		printf("Key released!\n");
-
 	uint32_t modifiers = wlr_keyboard_get_modifiers(device->keyboard);
-//	printf("modifiers is: %d\n", modifiers);
-//	printf("WLR_BUTTON_PRESSED: %d\n", WLR_BUTTON_PRESSED);
-//	printf("WLR_BUTTON_RELEASED: %d\n", WLR_BUTTON_RELEASED);
-//	printf("WLR_MODIFIER_ALT: %d\n", WLR_MODIFIER_ALT);
-//	printf("WLR_MODIFIER_CTRL: %d\n", WLR_MODIFIER_CTRL);
-	if (modifiers & WLR_MODIFIER_CTRL) 
-		printf("Ctrl was pressed!\n");
+	if ((modifiers & WLR_MODIFIER_CTRL) && event->state == WLR_BUTTON_PRESSED) {
+		printf("Ctrl was pressed. Modifers are: %d, wlr_modifier_alt is: %d\n", modifiers, WLR_MODIFIER_ALT);
+		wl_display_terminate(server->wl_display);
+	}
 
-	Array result = nvim_get_api_info(1);
-
-	printf("nvim_get_api_info result size is: %d\n", result.size);
-
-	return;
+	//Array result = nvim_get_api_info(1);
+	//printf("nvim_get_api_info result size is: %d\n", result.size);
 }
 
 void keyboard_handle_modifiers(struct wl_listener *listener, void *data) {
 	printf("Handling keyboard modifiers\n");
-
-	return;
 }
 
 void new_input_notify(struct wl_listener *listener, void *data) {
