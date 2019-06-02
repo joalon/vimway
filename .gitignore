@@ -2,3 +2,4 @@ obj/*
 build/*
 tags
 include/libnvim.a
+.vscode/
