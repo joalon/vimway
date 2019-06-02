@@ -1,7 +1,7 @@
 # Mostly a formality for building libnvim. TODO: Remove or make it useful
 CC = gcc
 
-.PHONY: clean
+.PHONY: libnvim
 
 clean:
 	rm include/libnvim.a
