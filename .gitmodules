@@ -1,3 +1,6 @@
 [submodule "third-party/neovim"]
 	path = third-party/neovim
 	url = https://github.com/joalon/neovim
+[submodule "third-party/wlroots"]
+	path = third-party/wlroots
+	url = https://github.com/joalon/wlroots
